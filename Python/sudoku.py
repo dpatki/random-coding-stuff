@@ -1,7 +1,52 @@
 import numpy as np
 import math
 grid1 = [[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]]
-print(np.matrix(grid1))
+grid2 = [[".",".","4",".",".",".","6","3","."],[".",".",".",".",".",".",".",".","."],["5",".",".",".",".",".",".","9","."],[".",".",".","5","6",".",".",".","."],["4",".","3",".",".",".",".",".","1"],[".",".",".","7",".",".",".",".","."],[".",".",".","5",".",".",".",".","."],[".",".",".",".",".",".",".",".","."],[".",".",".",".",".",".",".",".","."]]
+print(np.matrix(grid2))
+def isValidSudoku(board):
+    """
+        :type board: List[List[str]]
+        :rtype: bool
+    """
+    #check cols
+    for x in range(9):
+        tempdict = {}
+        for y in range(9):   
+            #print(temparr)
+            print(board[y][x])
+            print(tempdict)
+            if board[y][x] in tempdict:
+                if board[y][x] != '0':
+                    print("colfail at " + str(x) + str(y))
+                    return False
+            tempdict[board[y][x]] = 1
+    #check rows
+    for y in range(9):
+        tempdict = {}
+        for x in range(9):  
+            print(board[y][x])
+            print(tempdict) 
+            if board[y][x] in tempdict:
+                if board[y][x] != '0':
+                    print("rowfail at " + str(y) + str(x))
+                    return False
+            tempdict[board[y][x]] = 1
+    #check squares
+    for alpha in range(3):
+        for beta in range(3):    
+            tempdict = {}
+            for y in range(3*alpha, 3*alpha + 3):
+                for x in range(3*beta, 3*beta + 3):
+                    print(board[y][x])
+                    print(tempdict) 
+                    if board[y][x] in tempdict:
+                        if board[y][x] != '0':
+                            print("squarefail at " + str(y) + str(x))
+                            return False
+                    tempdict[board[y][x]] = 1
+    return True
+
+
 def isPossible(y, x, n, grid):
     #global grid
     for i in range(0, 9):
@@ -20,6 +65,55 @@ def isPossible(y, x, n, grid):
     #print("sup")
     return True
 
+def checkChars(grid):
+    dictionary  = {'0': 0, '1':0, '2':0, '3':0, '4':0, '5':0, '6':0, '7':0, '8':0, '9':0}
+    for y in range(9):
+        for x in range(9):
+            if grid[y][x] not in dictionary:
+                return -1
+    sum = 0
+    for i in range(10):
+        sum += dictionary[i]
+    return sum
+
+def outputSudoku(grid):
+    with open("solutions.txt", 'a') as f:
+        f.write("Solutions: \n")
+        for i in range(9):
+            for j in range(9):
+                f.write(str(grid[i][j]) + " ")
+            f.write(" \n")
+    f.close()
+
+def inputSudoku():
+    grid = []
+    with open("input.txt", 'r') as f:
+        for line in f:
+            grid.append(line)
+    i = 0
+    while i < len(grid):
+        grid[i].split()
+        i += 1
+    if len(grid) != 9:
+        return False
+    if len(grid[0]) != 9:
+        return False
+    for y in range(9):
+        for x in range(9):
+            if grid[y][x] == '.':
+                grid[y][x] = 0
+    thingy = checkChars(grid)
+    if thingy < 0:
+        print("Error in grid!\n")
+        return False
+    if thingy < 17:
+        print("Multiple solutions may exist. Please check your grid.\n")
+    truthiness = isValidSudoku(grid)
+    if not truthiness:
+        print("Invalid sudoku!\n")
+        return False
+    return grid
+
 
 def solve(grid):
     #global grid
@@ -36,4 +130,5 @@ def solve(grid):
     print(np.matrix(grid))
     input("hello")
 #print(isPossible(4,4, 4))
-solve(grid1)
+#solve(grid1)
+#outputSudoku((grid2))
