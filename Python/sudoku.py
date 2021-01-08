@@ -80,9 +80,9 @@ def checkChars(grid):
         sum += dictionary[i]
     return sum
 
-def outputSudoku(grid):
+def outputSudoku(grid, str):
     with open("solutions.txt", 'a') as f:
-        f.write("Solutions: \n")
+        f.write(str)
         for i in range(9):
             for j in range(9):
                 f.write(str(grid[i][j]) + " ")
@@ -140,8 +140,8 @@ def solve(grid, counter):
                             solve(grid, counter + 1)
                         grid[y][x] = 0
                 return
-    print("hi")
-    outputSudoku(grid)
+    print("Solution:")
+    outputSudoku(grid, "Solutions: \n")
     print(np.matrix(grid))
     #print(3/0)
     sys.exit()
@@ -150,8 +150,10 @@ def solve(grid, counter):
 
 def inToOut():
     grid = inputSudoku()
-    print(grid)
+    print("Input:")
+    print(np.matrix(grid))
     if grid != False:
+        outputSudoku(grid, "Input: \n")
         solve(grid, 0)
 
 inToOut()
